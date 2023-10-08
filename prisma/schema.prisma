@@ -1,0 +1,19 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model users {
+    id       String    @id @default(auto()) @map("_id") @db.ObjectId
+    username String    @unique
+    city String
+    isSubscribed Boolean @default(true)
+    chatId Int
+}
