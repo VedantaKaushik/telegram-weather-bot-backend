@@ -24,8 +24,11 @@ const check_city = (cityName: string) => {
 
 Injectable();
 export class BotService {
-  onModuleInit() {
+  async onModuleInit() {
     this.botStart();
+
+    // Db Connection
+    await prisma.$connect();
 
     // Running the function after every 1s
     setInterval(() => {
@@ -37,7 +40,6 @@ export class BotService {
   botStart() {
     bot.on('message', async (msg) => {
       // Connecting to DB
-      await prisma.$connect();
 
       //Getting the required user info
       const userName = msg.from.username;
@@ -105,7 +107,7 @@ export class BotService {
   // Sending daily update to user on 8:30 am IST
   async sendUpdate() {
     // Getting the UTC time and converting it into string
-    const UTCTime = new Date().toUTCString().slice(-12, -4);
+    const UTCTime: string = new Date().toUTCString().slice(-12, -4);
 
     // Send update to user if he is subscribed
     const all_users = await prisma.users.findMany({
